@@ -1,0 +1,11 @@
+.square-container {
+  align-items: center;
+  border: 1px solid;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  flex-basis: 33.3%;
+  height: 40px;
+  justify-content: center;
+  width: 20px;
+}
