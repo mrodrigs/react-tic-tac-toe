@@ -1,23 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+import './styles.css';
+
+import Board from './components/Board';
+
+import calculateWinner from './utils/calcWinner';
 
 function App() {
+  const [positions, setPositions] = useState(Array(9).fill(null));
+  const [nextPlayer, setNextPlayer] = useState('X');
+  const [winner, setWinner] = useState(null);
+
+  const handleSquareClick = (index) => {
+    if (!positions[index] && !winner) {
+      const newPositions = [...positions];
+
+      newPositions[index] = nextPlayer;
+
+      setPositions(newPositions);
+
+      const newWinner = calculateWinner(newPositions);
+
+      if (newWinner) {
+        setWinner(newWinner);
+      } else {
+        setNextPlayer(currentPlayer => currentPlayer === 'X' ? 'O' : 'X');
+      }
+    }
+  }
+
+  const handleReset = () => {
+    setWinner(null);
+    setPositions(Array(9).fill(null))
+    setNextPlayer('X');
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      {winner && <span>Winner: {winner}</span>}
+      <button onClick={handleReset}>Reset</button>
+      <Board positions={positions} onClick={handleSquareClick} />
     </div>
   );
 }
